@@ -1,0 +1,24 @@
+[project]
+name = "standard-dialogs"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "C. David Shaffer", email = "cdshaffer@acm.org" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "pyside6>=6.10.0",
+]
+
+[project.scripts]
+standard-dialogs = "standard_dialogs:main"
+modal-messagebox = "standard_dialogs.modal_messagebox_demo:main"
+modal-fontdialog = "standard_dialogs.modal_fontdialog_demo:main"
+nonmodal-messagebox = "standard_dialogs.nonmodal_messagebox_demo:main"
+nonmodal-fontdialog = "standard_dialogs.nonmodal_fontdialog_demo:main"
+dialogs-showcase = "standard_dialogs.standard_dialogs_showcase:main"
+
+[build-system]
+requires = ["uv_build>=0.9.2,<0.10.0"]
+build-backend = "uv_build"

@@ -1,0 +1,12 @@
+{
+    "editor.formatOnSave": true,
+    "autoDocstring.docstringFormat": "sphinx",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "PySide6",
+            "depth": 3,
+            "includeAllSymbols": true
+        }
+    ]
+}
