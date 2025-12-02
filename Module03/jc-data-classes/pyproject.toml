@@ -1,0 +1,17 @@
+[project]
+name = "jc-data-classes"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "C. David Shaffer", email = "cdshaffer@acm.org" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+jc-data-classes = "jc_data_classes:main"
+
+[build-system]
+requires = ["uv_build>=0.9.2,<0.10.0"]
+build-backend = "uv_build"

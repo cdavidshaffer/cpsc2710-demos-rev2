@@ -1,0 +1,23 @@
+[project]
+name = "pycalc"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "C. David Shaffer", email = "cdshaffer@acm.org" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "pyside6>=6.10.0",
+]
+
+[project.scripts]
+pycalc = "pycalc.calculator:main"
+dual_calc = "pycalc.dual_calculator:main"
+pycalc-lecture-1 = "pycalc.end_lecture_1:main"
+pycalc-lecture-2 = "pycalc.end_lecture_2:main"
+
+[build-system]
+requires = ["uv_build>=0.9.2,<0.10.0"]
+build-backend = "uv_build"
+
