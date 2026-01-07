@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -7,3 +8,4 @@ class Contact:
     address: str
     email: str
     phone: str
+    id: Optional[int] = None
