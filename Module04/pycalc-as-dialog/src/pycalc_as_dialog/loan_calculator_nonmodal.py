@@ -1,6 +1,6 @@
 import sys
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QApplication,
@@ -21,10 +21,13 @@ from .calculator import Pycalc
 
 
 class CalculatorDialog(QDialog):
+    value_shown = Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         layout = QVBoxLayout(self)
         self.calculator = Pycalc()
+        self.calculator.equals_clicked.connect(self.value_shown)
         layout.addWidget(self.calculator)
         box = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
@@ -59,7 +62,7 @@ class LoanCalculator(QWidget):
         :type parent: QWidget or None
         """
         super().__init__(parent)
-
+        self.calculator_dialog = None
         self.interest_rate_input = QLineEdit()
         self.interest_rate_input.setPlaceholderText("Enter annual interest rate (%)")
 
@@ -105,15 +108,25 @@ class LoanCalculator(QWidget):
         return w
 
     def _calculator_button_clicked(self):
-        # top half
-        window = CalculatorDialog()
-        window.setModal(True)
-        window.show()
-        result = window.exec()
+        if self.calculator_dialog is None:
+            self.calculator_dialog = CalculatorDialog(self)
+            self.calculator_dialog.setWindowFlag(
+                Qt.WindowType.WindowStaysOnTopHint, True
+            )
+            self.calculator_dialog.setModal(False)
+            self.calculator_dialog.accepted.connect(self._calculator_dialog_accepted)
+            self.calculator_dialog.value_shown.connect(
+                self._calculator_dialog_value_shown
+            )
+        self.calculator_dialog.show()
+        self.calculator_dialog.raise_()
+        self.calculator_dialog.activateWindow()
 
-        # bottom half
-        if result == QDialog.DialogCode.Accepted:
-            self.loan_amount_input.setText(window.get_x_register())
+    def _calculator_dialog_accepted(self):
+        self.loan_amount_input.setText(self.calculator_dialog.get_x_register())
+
+    def _calculator_dialog_value_shown(self):
+        self.loan_amount_input.setText(self.calculator_dialog.get_x_register())
 
     def _calculate_payment_clicked(self):
         """Calculate and display the monthly loan payment."""

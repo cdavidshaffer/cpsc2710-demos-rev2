@@ -1,5 +1,5 @@
 [project]
-name = "pycalc-as-dialog"
+name = "contacts"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -9,13 +9,13 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "pyside6>=6.10.1",
+    "pyside6-stubs>=6.7.3.0",
+    "sqlalchemy>=2.0.44",
 ]
 
 [project.scripts]
-pycalc = "pycalc_as_dialog.calculator:main"
-loan = "pycalc_as_dialog.loan_calculator:main"
-loan-nonmodal = "pycalc_as_dialog.loan_calculator_nonmodal:main"
+contacts = "contacts.contacts_ui:main"
 
 [build-system]
-requires = ["uv_build>=0.9.16,<0.10.0"]
+requires = ["uv_build>=0.9.2,<0.10.0"]
 build-backend = "uv_build"
