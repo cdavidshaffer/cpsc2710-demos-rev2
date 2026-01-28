@@ -1,5 +1,5 @@
 [project]
-name = "pycalc-as-dialog"
+name = "progress-bar"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -12,9 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-pycalc = "pycalc_as_dialog.calculator:main"
-loan = "pycalc_as_dialog.loan_calculator:main"
-loan-nonmodal = "pycalc_as_dialog.loan_calculator_nonmodal:main"
+progress-bar = "progress_bar.demo:main"
 
 [build-system]
 requires = ["uv_build>=0.9.16,<0.10.0"]

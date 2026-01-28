@@ -1,17 +1,17 @@
 import sys
 from functools import partial
 
+from PySide6.QtCore import QSize, Signal
 from PySide6.QtWidgets import (
     QApplication,
     QGridLayout,
     QLineEdit,
     QPushButton,
+    QSizePolicy,
     QVBoxLayout,
     QWidget,
-    QSizePolicy,
 )
 
-from PySide6.QtCore import QSize
 
 class CalculatorButton(QPushButton):
     def __init__(self, text, parent=None):
@@ -19,7 +19,6 @@ class CalculatorButton(QPushButton):
         self.setSizePolicy(
             QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         )
-
 
     def sizeHint(self):
         default = super().sizeHint()
@@ -52,6 +51,8 @@ class Pycalc(QWidget):
     :ivar operator_register: The operator register
     :vartype operator_register: str or None
     """
+
+    equals_clicked = Signal()
 
     def __init__(self, parent=None, debug=False):
         """Initialize the calculator widget.
@@ -112,10 +113,10 @@ class Pycalc(QWidget):
             button_layout.addWidget(button, index, 3)
 
         button_equals = CalculatorButton("=")
-        button_equals.clicked.connect(self._equals_clicked)
+        button_equals.clicked.connect(self._equals_button_clicked)
         button_layout.addWidget(button_equals, 3, 2)
 
-    def _equals_clicked(self):
+    def _equals_button_clicked(self):
         """Handle the equals button click event.
 
         Performs the calculation based on the operator register and updates
@@ -136,6 +137,7 @@ class Pycalc(QWidget):
         self.y_register = ""
         self.operator_register = None
         self._update_ui()
+        self.equals_clicked.emit()
 
     def _operator_clicked(self, operator):
         """Handle an operator button click event.
@@ -147,7 +149,7 @@ class Pycalc(QWidget):
         :type operator: str
         """
         if self.operator_register is not None:
-            self._equals_clicked()
+            self._equals_button_clicked()
         self.y_register = self.x_register
         self.x_register = ""
         self.operator_register = operator

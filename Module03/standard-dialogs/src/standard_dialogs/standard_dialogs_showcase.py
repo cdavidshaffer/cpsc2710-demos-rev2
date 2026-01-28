@@ -324,7 +324,6 @@ class StandardDialogsShowcase(QMainWindow):
         use_native = self.use_native_checkbox.isChecked()
         msg_box.setOption(QMessageBox.DontUseNativeDialog, not use_native)
 
-        msg_box.show()
         msg_box.exec()
         self.status_label.setText("Status: Information message shown")
 
@@ -339,7 +338,6 @@ class StandardDialogsShowcase(QMainWindow):
         use_native = self.use_native_checkbox.isChecked()
         msg_box.setOption(QMessageBox.DontUseNativeDialog, not use_native)
 
-        msg_box.show()
         msg_box.exec()
         self.status_label.setText("Status: Warning message shown")
 
