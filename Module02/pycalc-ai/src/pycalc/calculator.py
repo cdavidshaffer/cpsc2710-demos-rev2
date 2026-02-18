@@ -16,15 +16,6 @@ _debug = True
 class Pycalc(QWidget):
     """A GUI 4-function calculator.
 
-    ```
-    window = QWidget()
-    window_layout = VBoxLayout()
-    calculator = Pycalc()
-    window_layout.addWidget(calculator)
-    window.set_layout(window_layout)
-    window.show()
-    ```
-
     State machine example::
 
         3        -- (x = 3, y = None, op = None)

@@ -4,8 +4,6 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QApplication,
-    QDialog,
-    QDialogButtonBox,
     QFormLayout,
     QHBoxLayout,
     QLabel,
@@ -13,28 +11,10 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QMessageBox,
     QPushButton,
-    QVBoxLayout,
     QWidget,
 )
 
-from .calculator import Pycalc
-
-
-class CalculatorDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
-        layout = QVBoxLayout(self)
-        self.calculator = Pycalc()
-        layout.addWidget(self.calculator)
-        box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
-        )
-        box.accepted.connect(self.accept)
-        box.rejected.connect(self.reject)
-        layout.addWidget(box)
-
-    def get_x_register(self):
-        return self.calculator.x_register
+from pycalc_as_dialog.calculator_dialog import CalculatorDialog
 
 
 class LoanCalculator(QWidget):
@@ -60,6 +40,10 @@ class LoanCalculator(QWidget):
         """
         super().__init__(parent)
 
+        self.calculator_dialog = None
+
+        self.loan_amount_widget = self._create_loan_amount_widget()
+
         self.interest_rate_input = QLineEdit()
         self.interest_rate_input.setPlaceholderText("Enter annual interest rate (%)")
 
@@ -77,43 +61,46 @@ class LoanCalculator(QWidget):
 
         layout = QFormLayout()
         layout.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.ExpandingFieldsGrow)
-        layout.addRow("Loan Amount ($)", self._create_loan_amount_input())
+        layout.addRow("Loan Amount ($)", self.loan_amount_widget)
         layout.addRow("Annual Interest Rate (%)", self.interest_rate_input)
         layout.addRow("Loan Term (years)", self.loan_term_input)
         layout.addRow("", calculate_button)
         layout.addRow("", self.result_label)
         self.setLayout(layout)
 
-    def _create_loan_amount_input(self):
+    def _create_loan_amount_widget(self):
         self.loan_amount_input = QLineEdit()
         self.loan_amount_input.setPlaceholderText("Enter loan amount")
         self.loan_amount_input.setStyleSheet("border: none; margin: 0px; padding: 0px")
 
         calculator_button = QPushButton()
         calculator_button.setIcon(QIcon("calculator-icon-8176.png"))
-        calculator_button.clicked.connect(self._calculator_button_clicked)
         calculator_button.setFlat(True)
-        calculator_button.setStyleSheet("margin: 0px; border: none; padding: 0px")
+        calculator_button.setStyleSheet("border: none; padding: 0px; margin: 0px")
+        calculator_button.clicked.connect(self._calculator_button_clicked)
 
         w = QWidget()
         layout = QHBoxLayout(w)
-        layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.loan_amount_input)
         layout.addWidget(calculator_button)
 
         return w
 
     def _calculator_button_clicked(self):
-        # top half
-        window = CalculatorDialog()
-        window.setModal(True)
-        window.show()
-        result = window.exec()
+        if self.calculator_dialog is None:
+            self.calculator_dialog = CalculatorDialog(self)
+            self.calculator_dialog.setModal(True)
+            self.calculator_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+            self.calculator_dialog.accepted.connect(self._calculator_dialog_accepted)
 
-        # bottom half
-        if result == QDialog.DialogCode.Accepted:
-            self.loan_amount_input.setText(window.get_x_register())
+        self.calculator_dialog.show()
+        self.calculator_dialog.raise_()
+        self.calculator_dialog.activateWindow()
+
+    def _calculator_dialog_accepted(self):
+        self.loan_amount_input.setText(self.calculator_dialog.get_x_register())
 
     def _calculate_payment_clicked(self):
         """Calculate and display the monthly loan payment."""

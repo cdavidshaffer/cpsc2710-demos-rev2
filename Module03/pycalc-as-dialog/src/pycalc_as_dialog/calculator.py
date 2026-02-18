@@ -1,7 +1,7 @@
 import sys
 from functools import partial
 
-from PySide6.QtCore import QSize, Signal
+from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (
     QApplication,
     QGridLayout,
@@ -28,15 +28,6 @@ class CalculatorButton(QPushButton):
 class Pycalc(QWidget):
     """A GUI 4-function calculator.
 
-    ```
-    window = QWidget()
-    window_layout = VBoxLayout()
-    calculator = Pycalc()
-    window_layout.addWidget(calculator)
-    window.set_layout(window_layout)
-    window.show()
-    ```
-
     State machine example::
 
         3        -- (x = 3, y = None, op = None)
@@ -51,8 +42,6 @@ class Pycalc(QWidget):
     :ivar operator_register: The operator register
     :vartype operator_register: str or None
     """
-
-    equals_clicked = Signal()
 
     def __init__(self, parent=None, debug=False):
         """Initialize the calculator widget.
@@ -70,12 +59,12 @@ class Pycalc(QWidget):
 
         calculator_layout = QVBoxLayout()
         self.display = QLineEdit()
-        self.display.setEnabled(False)
+        self.display.setReadOnly(True)
         self.y_debug = QLineEdit()
-        self.y_debug.setEnabled(False)
+        self.y_debug.setReadOnly(True)
         self.y_debug.setVisible(debug)
         self.operator_debug = QLineEdit()
-        self.operator_debug.setEnabled(False)
+        self.operator_debug.setReadOnly(True)
         self.operator_debug.setVisible(debug)
         calculator_layout.addWidget(self.display)
         calculator_layout.addWidget(self.y_debug)
@@ -137,7 +126,6 @@ class Pycalc(QWidget):
         self.y_register = ""
         self.operator_register = None
         self._update_ui()
-        self.equals_clicked.emit()
 
     def _operator_clicked(self, operator):
         """Handle an operator button click event.

@@ -6,16 +6,14 @@ readme = "README.md"
 authors = [
     { name = "C. David Shaffer", email = "cdshaffer@acm.org" }
 ]
-requires-python = "=3.13"
+requires-python = ">=3.14"
 dependencies = [
     "pip>=25.3",
     "pyside6>=6.10.1",
 ]
 
 [project.scripts]
-pycalc = "pycalc_as_dialog.calculator:main"
 loan = "pycalc_as_dialog.loan_calculator:main"
-loan-nonmodal = "pycalc_as_dialog.loan_calculator_nonmodal:main"
 
 [build-system]
 requires = ["uv_build>=0.9.16,<0.10.0"]
