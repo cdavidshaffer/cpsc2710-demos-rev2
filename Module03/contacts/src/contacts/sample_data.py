@@ -1,7 +1,7 @@
 from contacts.contact import Contact
 
 
-def get_samples() -> list[Contact]:
+def get_samples():
     """Return a list of sample Contact objects based on Flintstones characters."""
     return [
         Contact(

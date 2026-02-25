@@ -12,11 +12,8 @@ dependencies = [
 ]
 
 [project.scripts]
-slow-slot = "threads.slow_slot:main"
 two-tasks-sequential = "threads.two_tasks:main_sequential"
 two-tasks-threaded = "threads.two_tasks:main_threaded"
-progress-bar = "threads.progress_bar_demo:main"
-threaded-slow-slot = "threads.threaded_slow_slot:main"
 
 [build-system]
 requires = ["uv_build>=0.9.16,<0.10.0"]
