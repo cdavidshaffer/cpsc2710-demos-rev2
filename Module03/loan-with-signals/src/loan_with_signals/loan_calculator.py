@@ -1,6 +1,6 @@
 import sys
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QDir, Qt
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QApplication,
@@ -74,7 +74,7 @@ class LoanCalculator(QWidget):
         self.loan_amount_input.setStyleSheet("border: none; margin: 0px; padding: 0px")
 
         calculator_button = QPushButton()
-        calculator_button.setIcon(QIcon("calculator-icon-8176.png"))
+        calculator_button.setIcon(QIcon.fromTheme("accessories-calculator"))
         calculator_button.setFlat(True)
         calculator_button.setStyleSheet("border: none; padding: 0px; margin: 0px")
         calculator_button.clicked.connect(self._calculator_button_clicked)
@@ -167,6 +167,15 @@ class LoanCalculatorWindow(QMainWindow):
         )
 
 
+def walk(prefix=":/icons"):
+    print(f"Walking {prefix}")
+    d = QDir(prefix)
+    for entry in d.entryList(QDir.Files):
+        print(prefix + "/" + entry)
+    for sub in d.entryList(QDir.Dirs | QDir.NoDotAndDotDot):
+        walk(prefix + "/" + sub)
+
+
 def main():
     """Run the loan calculator application."""
     app = QApplication(sys.argv)
@@ -174,6 +183,8 @@ def main():
     window = LoanCalculatorWindow()
     window.setWindowTitle("Loan Payment Calculator")
     window.show()
+
+    walk()
 
     sys.exit(app.exec())
 
