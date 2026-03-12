@@ -1,5 +1,5 @@
 [project]
-name = "style-sheets"
+name = "style-sheet"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,12 +8,12 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
-    "PySide6>=6.8.0",
+    "pyside6>=6.10.2",
 ]
 
 [project.scripts]
-style-sheets = "style_sheets.cat_window:main"
+demo = "style_sheet.demo:main"
 
 [build-system]
-requires = ["uv_build>=0.9.16,<0.10.0"]
+requires = ["uv_build>=0.10.4,<0.11.0"]
 build-backend = "uv_build"
