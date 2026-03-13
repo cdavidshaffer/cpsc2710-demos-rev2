@@ -1,0 +1,10 @@
+/*
+ * Default application style
+ */
+QLineEdit[invalid="true"] {
+    border: 3px solid red;
+}
+
+QLineEdit[invalid="false"]:focus {
+    border: 3px solid blue;
+}

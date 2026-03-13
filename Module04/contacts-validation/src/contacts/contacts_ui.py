@@ -1,6 +1,6 @@
 import sys
 
-from PySide6.QtCore import QLocale, QTranslator
+from PySide6.QtCore import QFile, QLocale, QTranslator
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -50,20 +50,28 @@ class ContactsWindow(QMainWindow):
 
 
 def load_translations(app):
-    # locale = QLocale.system()
-    locale = QLocale(QLocale.Language.Spanish, QLocale.Country.Spain)
+    locale = QLocale.system()
     translator = QTranslator(app)
     if translator.load(locale, "translation", "_", ":/translations"):
-        print(f"{locale} loaded")
         app.installTranslator(translator)
     else:
         print(f"translations for {locale} not found")
+
+
+def load_style_sheet(app):
+    file = QFile(":/styles/default.qss")
+    if not file.open(QFile.ReadOnly):
+        print(f"Unable to open style file {file}")
+    else:
+        app.setStyleSheet(file.readAll().toStdString())
+        file.close()
 
 
 def main():
     app = QApplication(sys.argv)
 
     load_translations(app)
+    load_style_sheet(app)
 
     window = ContactsWindow()
     window.show()
