@@ -75,7 +75,9 @@ class ContactEditor(QWidget):
         for input in self._validated_inputs:
             input.setProperty("invalid", "false")
             input.textChanged.connect(partial(self._validate_input, input))
-            input.textEdited.connect(partial(self._validate_input, input))
+            # note: lecture showed textEdited signal as well but this is not needed
+            # as textChanged is emitted both by setText() and when the user
+            # edits the text.
 
     def _save_button_clicked(self):
         if self._contact is None:
