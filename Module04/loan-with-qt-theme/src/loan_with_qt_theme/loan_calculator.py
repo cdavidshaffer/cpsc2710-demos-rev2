@@ -1,5 +1,4 @@
 import sys
-from pathlib import Path
 
 from PySide6.QtCore import QDir, Qt
 from PySide6.QtGui import QAction, QIcon
@@ -15,7 +14,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from loan_with_signals.calculator_dialog import CalculatorDialog
+from .calculator_dialog import CalculatorDialog
 
 
 class LoanCalculator(QWidget):
@@ -75,8 +74,7 @@ class LoanCalculator(QWidget):
         self.loan_amount_input.setStyleSheet("border: none; margin: 0px; padding: 0px")
 
         calculator_button = QPushButton()
-        path = Path(__file__).parent.parent.parent / "calculator-icon-8176.png"
-        calculator_button.setIcon(QIcon(str(path)))
+        calculator_button.setIcon(QIcon.fromTheme("accessories-calculator"))
         calculator_button.setFlat(True)
         calculator_button.setStyleSheet("border: none; padding: 0px; margin: 0px")
         calculator_button.clicked.connect(self._calculator_button_clicked)

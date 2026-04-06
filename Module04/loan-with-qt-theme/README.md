@@ -1,0 +1,1 @@
+This is the same as loan-with-signals from Module 3 with one very tiny change.  The icon is drawn from the built-in Qt theme.
