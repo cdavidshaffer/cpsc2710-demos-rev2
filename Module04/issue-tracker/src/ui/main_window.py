@@ -28,14 +28,48 @@ class Ui_MainWindow(object):
         MainWindow.resize(921, 770)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.issues_table = QTableWidget(self.centralwidget)
+        if (self.issues_table.columnCount() < 4):
+            self.issues_table.setColumnCount(4)
+        __qtablewidgetitem = QTableWidgetItem()
+        self.issues_table.setHorizontalHeaderItem(0, __qtablewidgetitem)
+        __qtablewidgetitem1 = QTableWidgetItem()
+        self.issues_table.setHorizontalHeaderItem(1, __qtablewidgetitem1)
+        __qtablewidgetitem2 = QTableWidgetItem()
+        self.issues_table.setHorizontalHeaderItem(2, __qtablewidgetitem2)
+        __qtablewidgetitem3 = QTableWidgetItem()
+        self.issues_table.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         self.issues_table.setObjectName(u"issues_table")
         self.issues_table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.issues_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
 
-        self.verticalLayout.addWidget(self.issues_table)
+        self.horizontalLayout_2.addWidget(self.issues_table)
+
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.new_issue_button = QPushButton(self.centralwidget)
+        self.new_issue_button.setObjectName(u"new_issue_button")
+
+        self.verticalLayout.addWidget(self.new_issue_button)
+
+        self.delete_issue_button = QPushButton(self.centralwidget)
+        self.delete_issue_button.setObjectName(u"delete_issue_button")
+
+        self.verticalLayout.addWidget(self.delete_issue_button)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
+
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
         self.widget = QWidget(self.centralwidget)
         self.widget.setObjectName(u"widget")
@@ -93,7 +127,7 @@ class Ui_MainWindow(object):
         self.formLayout.setWidget(4, QFormLayout.ItemRole.FieldRole, self.notes_plain_text)
 
 
-        self.verticalLayout.addWidget(self.widget)
+        self.verticalLayout_2.addWidget(self.widget)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -112,7 +146,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.save_button)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -133,9 +167,9 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.status_combo, self.priority_combo)
         QWidget.setTabOrder(self.priority_combo, self.assigned_to_edit)
         QWidget.setTabOrder(self.assigned_to_edit, self.notes_plain_text)
-        QWidget.setTabOrder(self.notes_plain_text, self.cancel_button)
-        QWidget.setTabOrder(self.cancel_button, self.save_button)
-        QWidget.setTabOrder(self.save_button, self.issues_table)
+        QWidget.setTabOrder(self.notes_plain_text, self.save_button)
+        QWidget.setTabOrder(self.save_button, self.cancel_button)
+        QWidget.setTabOrder(self.cancel_button, self.issues_table)
 
         self.retranslateUi(MainWindow)
 
@@ -143,12 +177,22 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Issue Tracked!!", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Title", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Status", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Priority", None))
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Assigned to", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Notes", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        ___qtablewidgetitem = self.issues_table.horizontalHeaderItem(0)
+        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Title", None))
+        ___qtablewidgetitem1 = self.issues_table.horizontalHeaderItem(1)
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Status", None))
+        ___qtablewidgetitem2 = self.issues_table.horizontalHeaderItem(2)
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Priority", None))
+        ___qtablewidgetitem3 = self.issues_table.horizontalHeaderItem(3)
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Assigned to", None))
+        self.new_issue_button.setText(QCoreApplication.translate("MainWindow", u"New", None))
+        self.delete_issue_button.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"&Title", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"&Status", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"&Priority", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"&Assigned to", None))
+        self.label_5.setText(QCoreApplication.translate("MainWindow", u"&Notes", None))
         self.cancel_button.setText(QCoreApplication.translate("MainWindow", u"Cancel", None))
         self.save_button.setText(QCoreApplication.translate("MainWindow", u"Save", None))
     # retranslateUi

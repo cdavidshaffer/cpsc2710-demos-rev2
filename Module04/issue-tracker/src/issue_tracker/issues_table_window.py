@@ -3,7 +3,7 @@ import sys
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 
-from issue_tracker.issue import Priority, Status
+from issue_tracker.issue import Issue, Priority, Status
 from issue_tracker.sample_issues import get_samples
 from ui.main_window import Ui_MainWindow
 
@@ -15,24 +15,35 @@ class IssuesTableWindow(QMainWindow, Ui_MainWindow):
         self._issues = get_samples()
 
         self.setupUi(self)
-        self.retranslateUi(self)
-        self.setup_combo_boxes()
-        self.setup_issues_table()
+        self._setup_combo_boxes()
+        self._setup_issues_table()
         self._connect_widgets()
 
-    def setup_combo_boxes(self):
+    def _setup_combo_boxes(self):
         for p in Priority:
             self.priority_combo.addItem(p.name, p)
         for s in Status:
             self.status_combo.addItem(s.name, s)
 
-    def setup_issues_table(self):
-        columns = ["Title", "Status", "Priority", "Assigned to"]
-        self.issues_table.setColumnCount(len(columns))
-        self.issues_table.setHorizontalHeaderLabels(columns)
-        self.update_issues_table()
+    def _setup_issues_table(self):
+        self._update_issues_table()
 
-    def update_issues_table(self):
+    def _connect_widgets(self):
+        self.save_button.clicked.connect(self._save_button_clicked)
+        self.cancel_button.clicked.connect(self._cancel_button_clicked)
+        self.issues_table.itemSelectionChanged.connect(
+            self._issues_table_item_selection_changed
+        )
+        self.new_issue_button.clicked.connect(self._new_issue_button_clicked)
+        self.delete_issue_button.clicked.connect(self._delete_issue_button_clicked)
+
+    def _update_ui(self):
+        """Make all objects changes visible in the UI.
+
+        Currently only the issues table needs to be updated..."""
+        self._update_issues_table()
+
+    def _update_issues_table(self):
         self.issues_table.setRowCount(len(self._issues))
         for row, issue in enumerate(self._issues):
             for column, widget_item in enumerate(
@@ -51,62 +62,72 @@ class IssuesTableWindow(QMainWindow, Ui_MainWindow):
             QTableWidgetItem(issue.assigned_to),
         ]
 
-    def _connect_widgets(self):
-        self.issues_table.itemSelectionChanged.connect(
-            self._issues_table_selection_changed
-        )
-        self.cancel_button.clicked.connect(self._cancel_button_clicked)
-        self.save_button.clicked.connect(self._save_button_clicked)
+    def _save_button_clicked(self):
+        selected = self._get_selected_issue()
+        if selected is None:
+            return
+        self._update_issue_from_form(selected)
 
-    def _issues_table_selection_changed(self):
-        self._enable_disable_form()
-        selected = self._get_selected_rows()
-        if len(selected) == 0:
+    def _cancel_button_clicked(self):
+        self._issues_table_item_selection_changed()
+
+    def _new_issue_button_clicked(self):
+        self._issues.append(Issue("New Issue", Status.NEW, Priority.MEDIUM, None, ""))
+        self._update_ui()
+        self.issues_table.selectRow(len(self._issues) - 1)
+
+    def _delete_issue_button_clicked(self):
+        selected = self._get_selected_issue()
+        if selected is None:
+            return
+        self._issues.remove(selected)
+        self._update_ui()
+        self.issues_table.clearSelection()
+
+    def _issues_table_item_selection_changed(self):
+        selected = self._get_selected_issue()
+        if selected is None:
             self._clear_form()
         else:
-            assert len(selected) == 1
-            self._populate_form_from_row(selected[0])
+            self._show_issue(selected)
 
-    def _populate_form_from_row(self, row):
-        issue = self.issues_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+    def _clear_form(self):
+        self.title_edit.clear()
+        self.status_combo.setCurrentIndex(-1)
+        self.priority_combo.setCurrentIndex(-1)
+        self.notes_plain_text.clear()
+        self.assigned_to_edit.clear()
+
+    def _show_issue(self, issue):
         self.title_edit.setText(issue.title)
-        index = self.priority_combo.findData(issue.priority)
-        self.priority_combo.setCurrentIndex(index)
-        index = self.status_combo.findData(issue.status)
-        self.status_combo.setCurrentIndex(index)
+        self.status_combo.setCurrentIndex(self.status_combo.findData(issue.status))
+        self.priority_combo.setCurrentIndex(
+            self.priority_combo.findData(issue.priority)
+        )
         self.notes_plain_text.setPlainText(issue.notes)
         self.assigned_to_edit.setText(issue.assigned_to)
 
-    def _get_selected_rows(self):
-        selected = self.issues_table.selectedIndexes()
-        return list(set([s.row() for s in selected]))
+    def _update_issue_from_form(self, issue):
+        issue.title = self.title_edit.text()
+        issue.status = self.status_combo.currentData()
+        issue.priority = self.priority_combo.currentData()
+        issue.notes = self.notes_plain_text.toPlainText()
+        issue.assigned_to = self.assigned_to_edit.text()
+        self._update_ui()
 
-    def _form_widgets(self):
-        return [
-            self.title_edit,
-            self.status_combo,
-            self.priority_combo,
-            self.notes_plain_text,
-            self.assigned_to_edit,
-        ]
+    def _get_selected_issue(self):
+        """The user may or may not have selected a row in the table.  If not, return None, otherwise return the Issue
+        object corresponding to the selected row.  This issue is stored in UserRole data in column 0 of the selected row."""
+        selected_indices = self.issues_table.selectionModel().selectedRows()
+        assert len(selected_indices) < 2
 
-    def _clear_form(self):
-        for w in self._form_widgets():
-            w.clear()
-
-    def _enable_disable_form(self):
-        enabled = len(self._get_selected_rows()) == 1
-        for w in self._form_widgets():
-            w.setEnabled(enabled)
-        if enabled:
-            self.setup_combo_boxes()
-
-    def _cancel_button_clicked(self):
-        self._issues_table_selection_changed()
-
-    def _save_button_clicked(self):
-        # ... save to database ...
-        pass
+        return (
+            self.issues_table.item(selected_indices[0].row(), 0).data(
+                Qt.ItemDataRole.UserRole
+            )
+            if len(selected_indices) > 0
+            else None
+        )
 
 
 def main():
