@@ -1,0 +1,25 @@
+[project]
+name = "bank"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "C. David Shaffer", email = "cdshaffer@acm.org" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+bank = "bank.bank_account:main"
+
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[tool.mypy]
+mypy_path = "src"
