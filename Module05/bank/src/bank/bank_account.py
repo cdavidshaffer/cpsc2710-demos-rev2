@@ -1,7 +1,3 @@
-import pickle
-from pathlib import Path
-
-
 class WouldOverdraw(Exception):
     pass
 
@@ -63,30 +59,6 @@ class BankAccount:
             float: the balance of this account
         """
         return self._balance
-
-    def save(self, path: str | Path) -> None:
-        """
-        Serialize this account to a file using pickle.
-
-        Args:
-            path (str | Path): The file path to write the account to.
-        """
-        with Path(path).open("wb") as file:
-            pickle.dump(self, file)
-
-    @staticmethod
-    def load(path: str | Path) -> BankAccount:
-        """
-        Load a previously saved BankAccount from a file.
-
-        Args:
-            path (str | Path): The file path to read the account from.
-
-        Returns:
-            BankAccount: The account reconstructed from the file.
-        """
-        with Path(path).open("rb") as file:
-            return pickle.load(file)
 
     def __str__(self) -> str:
         """

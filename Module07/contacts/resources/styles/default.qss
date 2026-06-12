@@ -1,0 +1,10 @@
+/*
+ * Default application style
+ */
+QLineEdit[invalid="false"]:focus {
+    border: 3px solid palette(highlight);
+}
+
+*#remove-contact-button {
+    qproperty-icon: url("{{icon_path}}delete.svg");
+}
