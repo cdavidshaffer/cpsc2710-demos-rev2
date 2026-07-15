@@ -1,0 +1,32 @@
+A shopping cart can:
+
+   count the total number of all occurrences of all items in the cart
+      a cart is empty when it is first created
+
+   count the number of occurrences of a stock item in the cart
+      a cart is empty when it is first created
+
+   add one or more occurrences of a stock item
+      adding a stock item correspondingly increases the number of occurrences of that stock item in the cart and the total number of items in the cart.
+      adding a stock item does not impact the number of occurrences of other stock items in the cart.
+
+   remove one or more occurrences of a stock item
+      removing a stock item decreases, possibly to zero, the number of occurrences of this stock item in the cart.
+      it is an error (exception) to remove more occurrences of a stock item from a cart than there are.
+
+   compute the total of the prices of the items in the cart
+
+   get the list of "item counts", that is, a list containing dictionaries with the following keys,values:
+      item -- the StockItem
+      count -- the number of occurrences of a StockItem in the cart, must be > 0
+      line_price -- the price of count occurrences of this item
+   where no two elements of the list have the same StockItem.  This list should be complete and reflect all occurrences of all StockItems added to the cart, even if they were added separately.
+
+
+Collaborators:
+
+   StockItem relevant instance properties/methods:
+      name
+      unit_price
+      unit_weight
+   Instances of StockItem are hashable.
