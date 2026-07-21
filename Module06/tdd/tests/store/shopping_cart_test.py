@@ -46,12 +46,12 @@ class TestShoppingCart:
         "SPEC: adding a stock item does not impact the number of occurrences of other stock items in the cart."
         item_1 = "item_1"
         item_2 = "item_2"
-        cart.add_item(item_1, 100)
+        expected_item_1_count = 100
+        cart.add_item(item_1, expected_item_1_count)
         assert cart.get_count(item_2) == 0
 
-        expected_item_2_count = 30
-        cart.add_item(item_2, expected_item_2_count)
-        assert cart.get_count(item_2) == expected_item_2_count
+        cart.add_item(item_2, 30)
+        assert cart.get_count(item_1) == expected_item_1_count
 
     def test_given_cart_with_item_when_negative_count_added_then_value_error_and_quantity_unchanged(
         self, cart
