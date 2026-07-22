@@ -1,0 +1,4 @@
+QLineEdit[invalid="true"] {
+    border: 1px solid red;
+    background-color: #fff0f0;
+}
