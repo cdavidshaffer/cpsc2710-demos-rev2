@@ -7,7 +7,7 @@ description: >
 
 Widget conventions for this project:
 
-- Subclass QWidget, build layout in a private \_build_ui() method.
+- Subclass QWidget, build layout in a private _build_ui() method.
 - Wrap visible strings in self.tr(...).
 - self.setProperty("class", "<name>") as the QSS class selector.
 - Declare signals as class attributes.
